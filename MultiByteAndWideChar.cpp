@@ -60,7 +60,7 @@ void myprint(const char* tag, const char* pstr)
 }
 
 int trytrans(char const* locale, const wchar_t* pwchello) {
-    char* localeInfo = setlocale(LC_ALL, locale);
+    char* localeInfo = setlocale(LC_CTYPE, locale);
     printf("Locale information set to %s\n", localeInfo);
 
     int requiredSize = wcstombs(NULL, pwchello, 0);
@@ -75,50 +75,18 @@ int trytrans(char const* locale, const wchar_t* pwchello) {
 }
 
 int trytrans(char const* locale, const char* pmbhello) {
-    char* localeInfo = setlocale(LC_ALL, locale);
+    char* localeInfo = setlocale(LC_CTYPE, locale);
     printf("Locale information set to %s\n", localeInfo);
 
     int requiredSize = mbstowcs(NULL, pmbhello, 0);
     wchar_t* pwc = (wchar_t*)malloc((requiredSize + 1) * sizeof(wchar_t));
-    size_t size = mbstowcs(pwc, (char const*)pmbhello, requiredSize + 1); // C4996
+    size_t size = mbstowcs(pwc, (char const*)pmbhello, requiredSize + 1);
     if (size == (size_t)(-1)) {
         return 1;
     }
     myprint("mbstowcs", pwc);
     free(pwc);
     return 0;
-}
-
-inline std::string wstr2str(const std::wstring& xsistr)
-{
-    if (xsistr.empty()) {
-        return "";
-    }
-
-    size_t c = ::wcstombs(0, xsistr.c_str(), 0);
-    char* tmp = new char[c + 1];
-    ::wcstombs(tmp, xsistr.c_str(), c);
-    tmp[c] = '\0';
-
-    std::string ret(tmp);
-    delete[] tmp;
-    return ret;
-}
-
-inline std::wstring str2wstr(const std::string& str)
-{
-    if (str.empty()) {
-        return L"";
-    }
-
-    size_t c = ::mbstowcs(0, str.c_str(), 0);
-    wchar_t* tmp = new wchar_t[c + 1];
-    ::mbstowcs(tmp, str.c_str(), c);
-    tmp[c] = '\0';
-
-    std::wstring ret(tmp);
-    delete[] tmp;
-    return ret;
 }
 
 int mainz()
@@ -137,7 +105,7 @@ int mainz()
     // Locale information set to zh_CN.utf8
     trytrans("zh_CN.utf8", pwchello);
 
-    //setlocale(LC_CTYPE, "chinese-traditional"); // 认为输入的 MBS是 Big5 编码
+    //setlocale(LC_CTYPE, "chinese-traditional"); // 认为输入的 MBS 是 Big5 编码
     //setlocale(LC_CTYPE, "chinese-simplified");  // 设置输出的 MBS 为 GBK 编码
     trytrans("chinese-simplified", acpstr.c_str());
     trytrans("zh_CN.utf8", utf8str.c_str());
