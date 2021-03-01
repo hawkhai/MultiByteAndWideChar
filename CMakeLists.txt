@@ -9,6 +9,9 @@ include_directories(${FAKELIB_DIR}/include)
 
 add_definitions(-DDEBUG_FAKELIB)
 
+#add_subdirectory(fakelib)
+add_subdirectory(fakelib/libiconv-1.14 libiconv-1.14.build)
+
 # 将源代码添加到此项目的可执行文件。
 add_executable (MultiByteAndWideChar "MultiByteAndWideChar.cpp"
 ${FAKELIB_DIR}/include/vlocale.h
