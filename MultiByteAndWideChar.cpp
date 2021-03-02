@@ -38,7 +38,7 @@ int main()
 
     const wchar_t* pwchello = L"Hello 世界！";
     std::string utf8str = wstrToStr(pwchello, CP_UTF8);
-    std::string acpstr = wstrToStr(pwchello, (unsigned int)CP_ACP);
+    std::string acpstr = wstrToStr(pwchello, CP_ACP);
     myprint("wchar_t", pwchello);
     myprint("CP_ACP", acpstr.c_str());
     myprint("CP_UTF8", utf8str.c_str());
